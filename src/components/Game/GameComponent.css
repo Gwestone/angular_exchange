@@ -1,0 +1,110 @@
+.blocks{
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.game_title{
+    margin-top: 20%;
+    text-align: center;
+}
+
+.current{
+    margin-bottom: 20%;
+    text-align: center;
+}
+
+.label{
+    display: flex;
+    justify-content: center;
+    font-size: 26px;
+}
+
+.mainScreen{
+    width: 199px;
+    height: 200px;
+    background: red;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-end;
+    align-content: flex-end;
+    gap: 1px;
+}
+
+.mainScreen>div{
+    width: 100px;
+    background: darkorange;
+    height: 5px;
+    border-radius: 3px;
+}
+
+.leftScreen{
+    height: 200px;
+    width: 50px;
+    background: red;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-end;
+    align-content: flex-end;
+    gap: 1px;
+}
+
+.leftScreen>div{
+    width: 30px;
+    background: darkorange;
+    height: 5px;
+    border-radius: 3px;
+}
+
+.rightScreen{
+    height: 200px;
+    width: 50px;
+    background: red;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-end;
+    align-content: flex-end;
+    gap: 1px;
+}
+
+.rightScreen>div{
+    width: 30px;
+    background: darkorange;
+    height: 5px;
+    border-radius: 3px;
+}
+
+.Control_Button{
+    border: none;
+    background: rgba(255, 247, 0, 0.60);
+    color: rgb(119, 58, 0);
+    padding: 15px;
+    border-radius: 0;
+    font-size: 26px;
+}
+
+.Control_Button:hover{
+    background: rgba(255, 247, 0, 0.88);
+}
+
+.display{
+    display: flex;
+    justify-content: center;
+    font-size: 25px;
+}
+
+.base:nth-child(2), .base:nth-child(3){
+    background: rgba(255, 247, 0, 0.88);
+}
+
+.controls{
+    display: flex;
+    gap: 10px;
+    /*padding-left: 1px;*/
+}
