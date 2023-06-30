@@ -42,67 +42,43 @@ function GameComponent(props: {difficulty: Difficulty}) {
     }, [currentMove])
 
     function aiMove(){
-        if (totalCount <= 6){
-            if (totalCount === 6){
-                if (humanCount % 2 === 0){
-                    addMatchesAI(2);
-                    return;
-                }
-                if (humanCount % 2 !== 0){
-                    addMatchesAI(1);
-                    return;
-                }
+        if (totalCount === 25){
+            addMatchesAI(1);
+            return;
+        }
+        if (totalCount > 4){
+            const remainder = totalCount % 4;
+            if (remainder === 0){
+                addMatchesAI(3);
+                console.log("wrong");
+                return;
             }
-            if (totalCount === 5){
-                if (aiCount % 2 === 0){
-                    addMatchesAI(1);
-                    return;
-                }else{
-                    addMatchesAI(3);
-                    return;
-                }
-            }
-            if (totalCount === 4){
-                if (aiCount % 2 !== 0){
-                    addMatchesAI(3);
-                    return;
-                }else{
-                    addMatchesAI(1);
-                    return;
-                }
-            }
-            if (totalCount === 3){
-                if (aiCount % 2 !== 0){
-                    addMatchesAI(3);
-                    return;
-                }else{
-                    addMatchesAI(2);
-                    return;
-                }
-            }
-            if (totalCount === 2){
-                if (aiCount % 2 !== 0){
-                    addMatchesAI(1);
-                    return;
-                }else{
-                    addMatchesAI(2);
-                    return;
-                }
-            }
-            if (totalCount === 1){
+            if (remainder === 1) {
                 addMatchesAI(1);
                 return;
             }
-
-        }else {
-            if (totalCount % 2 !== humanCount % 2){
+            if (remainder === 2) {
                 addMatchesAI(2);
                 return;
-            }else {
+            }
+            if (remainder === 3) {
                 addMatchesAI(3);
                 return;
             }
+        }else {
+            if (aiCount % 2 !== 0){
+                if (totalCount >= 3){
+                    addMatchesAI(3);
+                }else {
+                    addMatchesAI(1);
+                }
+                return;
+            }else {
+                addMatchesAI(2);
+                return;
+            }
         }
+
     }
 
     //win logic
