@@ -8,6 +8,8 @@ function GameComponent(props: {difficulty: Difficulty}) {
     const [humanCount, setHumanCount] = useState<number>(0);
     const [aiCount, setAiCount] = useState<number>(0);
 
+    const [loading, setLoading] = useState<boolean>(false);
+
     const [currentMove, setCurrentMove] = useState<"AI" | "Human">((props.difficulty) === "HARD" ? "AI" : "Human")
 
     //human logic
@@ -30,70 +32,78 @@ function GameComponent(props: {difficulty: Difficulty}) {
 
     useEffect(()=>{
         if (currentMove === "AI"){
-            if (totalCount <= 6){
-                if (totalCount === 6){
-                    if (humanCount % 2 === 0){
-                        addMatchesAI(2);
-                        return;
-                    }
-                    if (humanCount % 2 !== 0){
-                        addMatchesAI(1);
-                        return;
-                    }
+            setTimeout(()=>{
+                setLoading(true);
+                aiMove();
+                setLoading(false);
+            }, 1500);
+        }
+        // eslint-disable-next-line
+    }, [currentMove])
+
+    function aiMove(){
+        if (totalCount <= 6){
+            if (totalCount === 6){
+                if (humanCount % 2 === 0){
+                    addMatchesAI(2);
+                    return;
                 }
-                if (totalCount === 5){
-                    if (aiCount % 2 === 0){
-                        addMatchesAI(1);
-                        return;
-                    }else{
-                        addMatchesAI(3);
-                        return;
-                    }
-                }
-                if (totalCount === 4){
-                    if (aiCount % 2 !== 0){
-                        addMatchesAI(3);
-                        return;
-                    }else{
-                        addMatchesAI(1);
-                        return;
-                    }
-                }
-                if (totalCount === 3){
-                    if (aiCount % 2 !== 0){
-                        addMatchesAI(3);
-                        return;
-                    }else{
-                        addMatchesAI(2);
-                        return;
-                    }
-                }
-                if (totalCount === 2){
-                    if (aiCount % 2 !== 0){
-                        addMatchesAI(1);
-                        return;
-                    }else{
-                        addMatchesAI(2);
-                        return;
-                    }
-                }
-                if (totalCount === 1){
+                if (humanCount % 2 !== 0){
                     addMatchesAI(1);
                     return;
                 }
-
-            }else {
-                if (totalCount % 2 !== humanCount % 2){
-                    addMatchesAI(2);
+            }
+            if (totalCount === 5){
+                if (aiCount % 2 === 0){
+                    addMatchesAI(1);
                     return;
-                }else {
+                }else{
                     addMatchesAI(3);
                     return;
                 }
             }
+            if (totalCount === 4){
+                if (aiCount % 2 !== 0){
+                    addMatchesAI(3);
+                    return;
+                }else{
+                    addMatchesAI(1);
+                    return;
+                }
+            }
+            if (totalCount === 3){
+                if (aiCount % 2 !== 0){
+                    addMatchesAI(3);
+                    return;
+                }else{
+                    addMatchesAI(2);
+                    return;
+                }
+            }
+            if (totalCount === 2){
+                if (aiCount % 2 !== 0){
+                    addMatchesAI(1);
+                    return;
+                }else{
+                    addMatchesAI(2);
+                    return;
+                }
+            }
+            if (totalCount === 1){
+                addMatchesAI(1);
+                return;
+            }
+
+        }else {
+            if (totalCount % 2 !== humanCount % 2){
+                addMatchesAI(2);
+                return;
+            }else {
+                addMatchesAI(3);
+                return;
+            }
         }
-        // eslint-disable-next-line
-    }, [currentMove])
+    }
 
     //win logic
     useEffect(()=>{
@@ -119,7 +129,7 @@ function GameComponent(props: {difficulty: Difficulty}) {
     }
 
   return (
-      <>
+      <div className={(loading) ? "fade" : ""}>
           <div className={"game_title"}>Matches left:  <br/>{totalCount}</div>
           <div className={"blocks"}>
               <div className={"base"}>
@@ -141,8 +151,8 @@ function GameComponent(props: {difficulty: Difficulty}) {
                   <div className={"display"}>{humanCount}</div>
               </div>
           </div>
-          <div className={"current"}>Current move: <br/>{currentMove}</div>
-      </>
+          <div className={"current " + ((currentMove !== "AI") ? "current_ai" : "current_human")}>Current move: <br/>{currentMove}</div>
+      </div>
   );
 }
 

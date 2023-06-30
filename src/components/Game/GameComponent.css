@@ -14,6 +14,18 @@
     text-align: center;
 }
 
+.current_human{
+    margin-bottom: 20%;
+    text-align: center;
+    color: blue;
+}
+
+.current_ai{
+    margin-bottom: 20%;
+    text-align: center;
+    color: green;
+}
+
 .label{
     display: flex;
     justify-content: center;
