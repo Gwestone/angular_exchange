@@ -1,15 +1,15 @@
 import {Reducer} from "react";
 
-type Turn = "AI" | "Human";
+export type Turn = "AI" | "Human";
 
-type GameState = {
+export type GameState = {
     aiCount: number
     humanCount: number;
     totalCount: number;
     currentMove: Turn;
 }
 
-type GameAction =
+export type GameAction =
     | { type: 'add_human', amount: number }
     | { type: 'add_ai', amount: number };
 
