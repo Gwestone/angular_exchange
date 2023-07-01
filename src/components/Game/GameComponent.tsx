@@ -1,37 +1,21 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import './GameComponent.css';
 import {Difficulty} from "../../types";
+import {gameReducer} from "../../reducers/gameReducer";
 
 function GameComponent(props: {difficulty: Difficulty}) {
 
-    const [totalCount, setTotalCount] = useState<number>(25);
-    const [humanCount, setHumanCount] = useState<number>(0);
-    const [aiCount, setAiCount] = useState<number>(0);
-
     const [loading, setLoading] = useState<boolean>(false);
 
-    const [currentMove, setCurrentMove] = useState<"AI" | "Human">((props.difficulty) === "HARD" ? "AI" : "Human")
+    const [state, dispatch] = useReducer(gameReducer, {totalCount: 25, aiCount: 0, humanCount: 0, currentMove: (props.difficulty) === "HARD" ? "AI" : "Human"})
 
     //human logic
     function addMatchesHuman(count: number){
-        if (count <= totalCount){
-            setTotalCount(totalCount - count);
-            setHumanCount(humanCount + count);
-            setCurrentMove("AI");
-        }
-    }
-
-    //ai logic
-    function addMatchesAI(count: number){
-        if (count <= totalCount){
-            setTotalCount(totalCount - count);
-            setAiCount(aiCount + count);
-            setCurrentMove("Human");
-        }
+        dispatch({type: "add_human", amount: count});
     }
 
     useEffect(()=>{
-        if (currentMove === "AI"){
+        if (state.currentMove === "AI"){
             setTimeout(()=>{
                 setLoading(true);
                 aiMove();
@@ -39,42 +23,41 @@ function GameComponent(props: {difficulty: Difficulty}) {
             }, 1500);
         }
         // eslint-disable-next-line
-    }, [currentMove])
+    }, [state])
 
     function aiMove(){
-        if (totalCount === 25){
-            addMatchesAI(1);
+        if (state.totalCount === 25){
+            dispatch({type: "add_ai", amount: 1});
             return;
         }
-        if (totalCount > 4){
-            const remainder = totalCount % 4;
+        if (state.totalCount > 4){
+            const remainder = state.totalCount % 4;
             if (remainder === 0){
-                addMatchesAI(3);
-                console.log("wrong");
+                dispatch({type: "add_ai", amount: 3});
                 return;
             }
             if (remainder === 1) {
-                addMatchesAI(1);
+                dispatch({type: "add_ai", amount: 1});
                 return;
             }
             if (remainder === 2) {
-                addMatchesAI(2);
+                dispatch({type: "add_ai", amount: 1});
                 return;
             }
             if (remainder === 3) {
-                addMatchesAI(3);
+                dispatch({type: "add_ai", amount: 3});
                 return;
             }
         }else {
-            if (aiCount % 2 !== 0){
-                if (totalCount >= 3){
-                    addMatchesAI(3);
+            if (state.aiCount % 2 !== 0){
+                if (state.totalCount >= 3){
+                    dispatch({type: "add_ai", amount: 3});
                 }else {
-                    addMatchesAI(1);
+                    dispatch({type: "add_ai", amount: 1});
                 }
                 return;
             }else {
-                addMatchesAI(2);
+                dispatch({type: "add_ai", amount: 1});
                 return;
             }
         }
@@ -83,13 +66,13 @@ function GameComponent(props: {difficulty: Difficulty}) {
 
     //win logic
     useEffect(()=>{
-        if (totalCount === 0){
-            if (aiCount % 2 === 0)
+        if (state.totalCount === 0){
+            if (state.aiCount % 2 === 0)
                 alert("Ai won");
-            else if(humanCount % 2 === 0)
+            else if(state.humanCount % 2 === 0)
                 alert("Human won");
         }
-    }, [aiCount, humanCount, totalCount])
+    }, [state])
 
     //utility
     function generateMatches(count: number){
@@ -101,15 +84,15 @@ function GameComponent(props: {difficulty: Difficulty}) {
     }
 
     function generateFadeClass(count: number){
-        return ((totalCount < count || (currentMove !== "Human")) ? "fade" : "");
+        return ((state.totalCount < count || (state.currentMove !== "Human")) ? "fade" : "");
     }
 
   return (
       <div className={(loading) ? "fade" : ""}>
-          <div className={"game_title"}>Matches left:  <br/>{totalCount}</div>
+          <div className={"game_title"}>Matches left:  <br/>{state.totalCount}</div>
           <div className={"blocks"}>
               <div className={"base"}>
-                  <div className={"mainScreen"}>{generateMatches(totalCount)} </div>
+                  <div className={"mainScreen"}>{generateMatches(state.totalCount)} </div>
                   <div className={"controls"}>
                       <button className={"Control_Button " + generateFadeClass(1)} onClick={()=>{addMatchesHuman(1)}}>+1</button>
                       <button className={"Control_Button " + generateFadeClass(2)} onClick={()=>{addMatchesHuman(2)}}>+2</button>
@@ -118,16 +101,16 @@ function GameComponent(props: {difficulty: Difficulty}) {
               </div>
               <div className={"base"}>
                   <div className={"label"}>AI</div>
-                <div className={"leftScreen"}>{generateMatches(aiCount)}</div>
-                <div className={"display"}>{aiCount}</div>
+                <div className={"leftScreen"}>{generateMatches(state.aiCount)}</div>
+                <div className={"display"}>{state.aiCount}</div>
               </div>
               <div className={"base"}>
                   <div className={"label"}>HU</div>
-                <div className={"rightScreen"}>{generateMatches(humanCount)}</div>
-                  <div className={"display"}>{humanCount}</div>
+                <div className={"rightScreen"}>{generateMatches(state.humanCount)}</div>
+                  <div className={"display"}>{state.humanCount}</div>
               </div>
           </div>
-          <div className={"current " + ((currentMove !== "AI") ? "current_ai" : "current_human")}>Current move: <br/>{currentMove}</div>
+          <div className={"current " + ((state.currentMove !== "AI") ? "current_ai" : "current_human")}>Current move: <br/>{state.currentMove}</div>
       </div>
   );
 }
